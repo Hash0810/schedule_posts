@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.9.6-eclipse-temurin:18 as build
+FROM maven:3.9.6-eclipse-temurin-18 as build
 WORKDIR /app
 
 # If using Maven Wrapper, copy and use:
