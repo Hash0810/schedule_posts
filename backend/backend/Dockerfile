@@ -1,25 +1,22 @@
 # Build stage
-FROM maven:3.9.6-eclipse-temurin-18 as build
+FROM maven:3.9.6-eclipse-temurin-18 AS build
 WORKDIR /app
 
-# If using Maven Wrapper, copy and use:
-# COPY mvnw .
-# COPY .mvn .mvn/
-# RUN ./mvnw dependency:go-offline -B
-
-# If still installing Maven system-wide:
-RUN apt-get update && \
-apt-get clean && \
-rm -rf /var/lib/apt/lists/*
-
+# Copy source code
 COPY . .
+
+# Build with Maven, skipping tests
 RUN mvn clean package -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:18-jre
 WORKDIR /app
+
+# Copy the jar from the build stage
 COPY --from=build /app/target/${JAR_FILE} app.jar
+
 EXPOSE 8080
+
 CMD ["java", "-jar", "app.jar"]
 
 # Optional healthcheck
