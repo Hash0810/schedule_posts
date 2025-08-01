@@ -8,19 +8,17 @@ WORKDIR /app
 # RUN ./mvnw dependency:go-offline -B
 
 # If still installing Maven system-wide:
-RUN apt-get update && apt-get install -y maven && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
 
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
 COPY . .
 RUN mvn clean package -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:18-jre
 WORKDIR /app
-ARG JAR_FILE=target/*.jar
-COPY --from=build /app/${JAR_FILE} app.jar
-
+COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 CMD ["java", "-jar", "app.jar"]
 
