@@ -13,7 +13,7 @@ FROM eclipse-temurin:18-jre
 WORKDIR /app
 
 # Copy the jar from the build stage
-COPY --from=build /app/target/${JAR_FILE} app.jar
+COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
